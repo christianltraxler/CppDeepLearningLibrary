@@ -2,11 +2,13 @@
 // Created by Christian Traxler on 4/18/23.
 //
 
-#ifndef CPPDEEPLEARNINGTESTS_LAYER_H
-#define CPPDEEPLEARNINGTESTS_LAYER_H
+#ifndef CPPDEEPLEARNING_LAYER_H
+#define CPPDEEPLEARNING_LAYER_H
 
 #include <vector>
 #include <unordered_map>
+
+#include "Helper.h"
 
 
 enum ActivationFunction {
@@ -18,27 +20,30 @@ enum ActivationFunction {
 
 class Layer {
 public:
-    Layer(int inputs, int outputs, ActivationFunction a);
+    Layer(int inputs, int outputs, ActivationFunction activation_function, double learning_rate);
     ~Layer();
 
     virtual std::vector<double> forwardPropagate(std::vector<double> inputs);
-    virtual void backPropagate(std::vector<double> inputs, std::vector<double> gradients);
+    virtual std::vector<double> backPropagate(const std::vector<double> inputs, const std::vector<double> gradients);
 
-private:
+protected:
     int _num_inputs;
     int _num_outputs;
-    ActivationFunction _activation_function;
-    std::vector<double> _weights;
+    afunc_ptr _forward_activation;
+    afunc_ptr _backward_activation;
+    double _learning_rate;
+
+    std::vector<std::vector<double>> _weights;
     std::vector<double> _biases;
 };
 
-class DenseLayer : private Layer {
+class DenseLayer : public Layer {
 public:
-    DenseLayer(int inputs, int outputs, ActivationFunction a);
+    DenseLayer(int inputs, int outputs, ActivationFunction activation_function, double learning_rate);
     ~DenseLayer();
 
     std::vector<double> forwardPropagate(std::vector<double> inputs);
-    void backPropagate(std::vector<double> inputs, std::vector<double> gradients);
+    std::vector<double> backPropagate(const std::vector<double> inputs, const std::vector<double> output_gradients);
 };
 
-#endif //CPPDEEPLEARNINGTESTS_LAYER_H
+#endif //CPPDEEPLEARNING_LAYER_H

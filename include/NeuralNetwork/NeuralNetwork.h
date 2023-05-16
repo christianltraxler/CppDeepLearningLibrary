@@ -2,13 +2,13 @@
 // Created by Christian Traxler on 4/18/23.
 //
 
-#ifndef CPPDEEPLEARNINGTESTS_NEURALNETWORK_H
-#define CPPDEEPLEARNINGTESTS_NEURALNETWORK_H
+#ifndef CPPDEEPLEARNING_NEURALNETWORK_H
+#define CPPDEEPLEARNING_NEURALNETWORK_H
 
 #include <vector>
 #include <string>
 
-#include <Layer.h>
+#include "Layer.h"
 
 class NeuralNetwork {
 public:
@@ -25,4 +25,4 @@ private:
 };
 
 
-#endif //CPPDEEPLEARNINGTESTS_NEURALNETWORK_H
+#endif //CPPDEEPLEARNING_NEURALNETWORK_H
