@@ -3,34 +3,46 @@
 //
 
 #include "NeuralNetwork/Layer.h"
+#include <iostream>
 
 
-Layer::Layer(int inputs, int outputs, ActivationFunction activation_function, double learning_rate) {
+Layer::Layer(int inputs, int outputs, int activation_function, double learning_rate) {
     _num_inputs = inputs;
     _num_outputs = outputs;
     _learning_rate = learning_rate;
-
-    std::pair<afunc_ptr, afunc_ptr> activation_functions = handleActivationFunction(activation_function);
-    _forward_activation = activation_functions.first;
-    _backward_activation = activation_functions.second;
+    _forward_activation = handleForwardActivationFunction(activation_function);
+    _backward_activation = handleBackwardActivationFunction(activation_function);
 }
 
 Layer::~Layer() {}
 
-std::vector<double> Layer::forwardPropagate(const std::vector<double> inputs) {}
+std::vector<double> Layer::forwardPropagate(const std::vector<double> inputs) {
+    return std::vector<double>();
+}
 
-std::vector<double> Layer::backPropagate(const std::vector<double> inputs, std::vector<double> gradients) {}
+std::vector<double> Layer::backPropagate(const std::vector<double> inputs, std::vector<double> gradients) {
+    return std::vector<double>();
+}
 
 
 
-DenseLayer::DenseLayer(int inputs, int outputs, ActivationFunction activation_function, double learning_rate) : Layer(inputs, outputs, activation_function, learning_rate) {
+DenseLayer::DenseLayer(int inputs, int outputs, int activation_function, double learning_rate) : Layer(inputs, outputs, activation_function, learning_rate) {
     _weights = std::vector<std::vector<double>>(outputs, std::vector<double>(inputs));
     _biases = std::vector<double>(outputs);
+    for(int i = 0; i < _num_outputs; i++) {
+        _biases[i] = (double) (rand() % 1);
+        for (int j = 0; j < _num_inputs; j++) {
+            _weights[i][j] = (double) (rand() % 1);
+        }
+    }
 }
 
 DenseLayer::~DenseLayer() {}
 
 std::vector<double> DenseLayer::forwardPropagate(const std::vector<double> inputs) {
+    assert(inputs.size() == _num_inputs);
+    assert(_weights.size() == _num_outputs);
+    assert(_weights[0].size() == _num_inputs);
     std::vector<double> outputs(_num_outputs);
     for (int i = 0; i < _num_outputs; i++) {
         outputs[i] = _biases[i];
@@ -61,4 +73,15 @@ std::vector<double> DenseLayer::backPropagate(const std::vector<double> inputs, 
         }
     }
     return input_gradients;
+}
+
+void Layer::printWeights() {
+    for (int i = 0; i < _weights.size(); i++)
+    {
+        for (int j = 0; j < _weights[i].size(); j++)
+        {
+            std::cout << _weights[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 }

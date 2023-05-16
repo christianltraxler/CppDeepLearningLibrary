@@ -12,15 +12,21 @@
 
 class NeuralNetwork {
 public:
-    NeuralNetwork();
+    NeuralNetwork(int epochs);
     ~NeuralNetwork();
 
     void add(Layer *layer);
     std::vector<double> propagate(const std::vector<double> inputs);
-    void fit(const std::vector<std::vector<double>> X, const std::vector<double> y);
+    std::vector<std::vector<double>> getAllInputs(const std::vector<double> inputs);
+    void fit(const std::vector<std::vector<double>> X, const std::vector<std::vector<double>> y);
     std::unordered_map<std::string, double> evaluate(const std::vector<std::vector<double>> X, const std::vector<double> y);
 
+    void printWeights();
+
 private:
+    int _num_epochs;
+    std::vector<double> (*_loss_function)(std::vector<double>, std::vector<double>);
+    std::vector<double> (*_loss_prime_function)(std::vector<double>, std::vector<double>);
     std::vector<Layer *> _layers;
 };
 

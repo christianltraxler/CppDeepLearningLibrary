@@ -7,3 +7,6 @@ include(CTest)
 
 add_subdirectory(lib)
 add_subdirectory(tests)
+add_subdirectory(sample_code)
+
+# add_executable(CppDeepLearningLib "./sample_code/main.cpp")

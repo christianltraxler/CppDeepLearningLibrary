@@ -5,3 +5,4 @@ This project is a high-level deep learning library in C++, inspired by the popul
 Configure `cmake -S . -B build`  
 Build `cmake --build build`  
 Test `cmake --build build --target test`  
+Run Sample Code `./build/sample_code/run`

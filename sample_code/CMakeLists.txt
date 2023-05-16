@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.24)
+project(CppDeepLearningSampleCode)
+add_executable(sample_code main.cpp)
+target_link_libraries(sample_code DeepLearningLibrary)
+set_target_properties(sample_code PROPERTIES OUTPUT_NAME "run")
