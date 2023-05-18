@@ -25,7 +25,7 @@ public:
 
 private:
     int _num_epochs;
-    std::vector<double> (*_loss_function)(std::vector<double>, std::vector<double>);
+    double (*_loss_function)(std::vector<double>, std::vector<double>);
     std::vector<double> (*_loss_prime_function)(std::vector<double>, std::vector<double>);
     std::vector<Layer *> _layers;
 };

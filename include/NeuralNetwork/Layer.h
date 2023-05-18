@@ -10,13 +10,6 @@
 
 #include "Helper.h"
 
-typedef double (*func)(double);
-enum ActivationFunction {
-    LINEAR,
-    SIGMOID,
-    RELU
-};
-
 
 class Layer {
 public:

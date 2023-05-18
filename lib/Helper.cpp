@@ -1,16 +1,10 @@
-#ifndef CPPDEEPLEARNING_HELPER_H
-#define CPPDEEPLEARNING_HELPER_H
-
-#include "NeuralNetwork/NeuralNetwork.h"
 #include "NeuralNetwork/Helper.h"
-
-
 
 double linear(double num) {
     return num;
 }
 
-double linear_prime(double num) {
+double dLinear(double num) {
     return 1;
 }
 
@@ -18,8 +12,8 @@ double sigmoid(double num) {
     return 1 / (1 + exp(num * -1));
 }
 
-double sigmoid_prime(double num) {
-    return num * (1.0 - num);
+double dSigmoid(double num) {
+    return sigmoid(num) * (1.0 - sigmoid(num));
 }
 
 double relu(double num) {
@@ -27,10 +21,14 @@ double relu(double num) {
     return num;
 }
 
-double relu_prime(double num) {
+double dRelu(double num) {
     return (num > 0);
 }
 
+double dTanh(const double x) {
+    double th = tanh(x); // dTanh(x) = sech^2(x) = 1 - tanh^2(x)
+    return 1.0 - th*th; 
+}
 
 func handleForwardActivationFunction(int activation_function) {
     switch (activation_function) {
@@ -38,6 +36,8 @@ func handleForwardActivationFunction(int activation_function) {
             return sigmoid;
         case (RELU):
             return relu;
+        case (TANH):
+            return tanh;
         default:
             return linear;
     }
@@ -47,13 +47,13 @@ func handleForwardActivationFunction(int activation_function) {
 func handleBackwardActivationFunction(int activation_function) {
     switch (activation_function) {
         case (SIGMOID):
-            return sigmoid_prime;
+            return dSigmoid;
         case (RELU):
-            return relu_prime;
+            return dRelu;
+        case (TANH):
+            return dTanh;
         default:
-            return linear_prime;
+            return dLinear;
     }
 
 }
-
-#endif //CPPDEEPLEARNING_HELPER_H

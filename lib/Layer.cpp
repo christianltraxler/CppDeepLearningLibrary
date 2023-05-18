@@ -30,9 +30,9 @@ DenseLayer::DenseLayer(int inputs, int outputs, int activation_function, double 
     _weights = std::vector<std::vector<double>>(outputs, std::vector<double>(inputs));
     _biases = std::vector<double>(outputs);
     for(int i = 0; i < _num_outputs; i++) {
-        _biases[i] = (double) (rand() % 1);
+        _biases[i] = (double) (rand() % 100);
         for (int j = 0; j < _num_inputs; j++) {
-            _weights[i][j] = (double) (rand() % 1);
+            _weights[i][j] = (double) (rand() % 100);
         }
     }
 }
@@ -40,9 +40,6 @@ DenseLayer::DenseLayer(int inputs, int outputs, int activation_function, double 
 DenseLayer::~DenseLayer() {}
 
 std::vector<double> DenseLayer::forwardPropagate(const std::vector<double> inputs) {
-    assert(inputs.size() == _num_inputs);
-    assert(_weights.size() == _num_outputs);
-    assert(_weights[0].size() == _num_inputs);
     std::vector<double> outputs(_num_outputs);
     for (int i = 0; i < _num_outputs; i++) {
         outputs[i] = _biases[i];
@@ -59,17 +56,17 @@ std::vector<double> DenseLayer::backPropagate(const std::vector<double> inputs, 
 
     for (int i = 0; i < _num_outputs; i++) {
         // Update gradients using derivative of activation function
-        output_gradients[i] = _backward_activation(output_gradients[i]);
+        output_gradients[i] *= _backward_activation(output_gradients[i]);
 
         // Update the biases dE/dB = dE/dY * dY/dB = dE/dY
-        _biases[i] -= _learning_rate * output_gradients[i];
+        _biases[i] += _learning_rate * output_gradients[i];
         for (int j = 0; j < _num_inputs; j++) {
             // Set the input gradient for the next layer in the backward pass
             //  - Must be done before updating weights
-            input_gradients[j] += _weights[i][j] * output_gradients[i];
+            input_gradients[j] = _weights[i][j] * output_gradients[i];
 
             // Update the weights dE/dW = dE/dY * dY/dW
-            _weights[i][j] -= _learning_rate * output_gradients[i] * inputs[j];
+            _weights[i][j] += _learning_rate * output_gradients[i] * inputs[j];
         }
     }
     return input_gradients;
@@ -82,6 +79,7 @@ void Layer::printWeights() {
         {
             std::cout << _weights[i][j] << " ";
         }
-        std::cout << std::endl;
+
+        std::cout << "     " << _biases[i] << std::endl;
     }
 }
